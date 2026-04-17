@@ -267,6 +267,7 @@ function LanguageToggle({ lang, setLang }: { lang: Lang; setLang: (l: Lang) => v
             background: lang === l ? "var(--accent)" : "transparent",
             color: lang === l ? "white" : "var(--text-muted)",
             letterSpacing: "0.04em",
+            cursor: "pointer",
           }}
           aria-pressed={lang === l}
         >
