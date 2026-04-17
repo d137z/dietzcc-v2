@@ -69,23 +69,22 @@ export default function ContactSection() {
     setServerError("");
 
     try {
-      const response = await fetch("/api/contact", {
+      const body = new URLSearchParams({
+        "form-name": "kontakt",
+        ...formData,
+      }).toString();
+
+      const response = await fetch("/", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body,
       });
 
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || "Noget gik galt. Prøv igen.");
-      }
-
+      if (!response.ok) throw new Error();
       setFormState("success");
-    } catch (err) {
+    } catch {
       setFormState("error");
-      setServerError(
-        err instanceof Error ? err.message : t.contact.errorServer
-      );
+      setServerError(t.contact.errorServer);
     }
   };
 
@@ -224,6 +223,8 @@ export default function ContactSection() {
               ) : (
                 <motion.form
                   key="form"
+                  name="kontakt"
+                  data-netlify="true"
                   onSubmit={handleSubmit}
                   noValidate
                   className="p-8 rounded-[16px] border"
@@ -233,6 +234,7 @@ export default function ContactSection() {
                     boxShadow: "var(--shadow-sm)",
                   }}
                 >
+                  <input type="hidden" name="form-name" value="kontakt" />
                   <div className="flex flex-col gap-5">
                     {/* Navn */}
                     <div>
