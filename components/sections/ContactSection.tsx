@@ -69,15 +69,10 @@ export default function ContactSection() {
     setServerError("");
 
     try {
-      const body = new URLSearchParams({
-        "form-name": "kontakt",
-        ...formData,
-      }).toString();
-
-      const response = await fetch("/", {
+      const response = await fetch("https://formspree.io/f/xyklweke", {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
 
       if (!response.ok) throw new Error();
@@ -223,8 +218,6 @@ export default function ContactSection() {
               ) : (
                 <motion.form
                   key="form"
-                  name="kontakt"
-                  data-netlify="true"
                   onSubmit={handleSubmit}
                   noValidate
                   className="p-8 rounded-[16px] border"
@@ -234,7 +227,6 @@ export default function ContactSection() {
                     boxShadow: "var(--shadow-sm)",
                   }}
                 >
-                  <input type="hidden" name="form-name" value="kontakt" />
                   <div className="flex flex-col gap-5">
                     {/* Navn */}
                     <div>
