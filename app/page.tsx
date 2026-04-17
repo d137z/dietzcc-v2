@@ -16,6 +16,13 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
+      {/* Netlify Forms detection — hidden from users */}
+      <form name="kontakt" data-netlify="true" hidden>
+        <input type="text" name="name" />
+        <input type="email" name="email" />
+        <input type="text" name="company" />
+        <textarea name="message"></textarea>
+      </form>
       <HeroSection />
       <ProblemSection />
       <SolutionsSection />
