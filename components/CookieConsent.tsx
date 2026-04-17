@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, Shield } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 type ConsentData = {
   decision: 'accepted' | 'rejected' | 'custom';
@@ -18,6 +19,7 @@ export function openCookieConsent() {
 }
 
 export default function CookieConsent() {
+  const { t } = useLanguage();
   const [visible, setVisible] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [statistics, setStatistics] = useState(false);
@@ -108,10 +110,10 @@ export default function CookieConsent() {
                   className="font-semibold text-[15px] leading-snug"
                   style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-geist-sans)' }}
                 >
-                  Vi respekterer dit privatliv
+                  {t.cookie.title}
                 </h2>
                 <p className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>
-                  dietzcc.dk · GDPR-cookie-samtykke
+                  {t.cookie.subtitle}
                 </p>
               </div>
             </div>
@@ -119,8 +121,7 @@ export default function CookieConsent() {
             {/* Brødtekst */}
             <div className="px-5 pt-3">
               <p className="text-sm leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-                Vi bruger cookies til at sikre grundlæggende funktionalitet på hjemmesiden. Med dit samtykke
-                kan vi også anvende cookies til statistik og marketing for at forbedre din oplevelse.
+                {t.cookie.body}
               </p>
 
               {/* Udvidet cookie-valg */}
@@ -135,21 +136,21 @@ export default function CookieConsent() {
                   >
                     <div className="mt-4 flex flex-col gap-2.5">
                       <CookieToggle
-                        label="Nødvendige"
-                        description="Sikrer login-sessions og grundlæggende sidefunktioner. Kan ikke fravalges."
+                        label={t.cookie.necessary}
+                        description={t.cookie.necessaryDesc}
                         checked={true}
                         disabled
                         onChange={() => {}}
                       />
                       <CookieToggle
-                        label="Statistik"
-                        description="Anonymiserede data om sideforbrug (f.eks. Google Analytics) til at forbedre indholdet."
+                        label={t.cookie.statistics}
+                        description={t.cookie.statisticsDesc}
                         checked={statistics}
                         onChange={setStatistics}
                       />
                       <CookieToggle
-                        label="Marketing"
-                        description="Målrettede annoncer og sporing af kampagneeffektivitet på tværs af platforme."
+                        label={t.cookie.marketing}
+                        description={t.cookie.marketingDesc}
                         checked={marketing}
                         onChange={setMarketing}
                       />
@@ -165,7 +166,7 @@ export default function CookieConsent() {
                 aria-expanded={expanded}
               >
                 {expanded ? <ChevronUp size={13} /> : <ChevronDown size={13} />}
-                {expanded ? 'Skjul detaljer' : 'Tilpas mine indstillinger'}
+                {expanded ? t.cookie.hideDetails : t.cookie.showDetails}
               </button>
             </div>
 
@@ -176,20 +177,20 @@ export default function CookieConsent() {
             >
               {expanded ? (
                 <OutlineButton onClick={() => save('custom', statistics, marketing)}>
-                  Gem valg
+                  {t.cookie.saveChoice}
                 </OutlineButton>
               ) : (
                 <OutlineButton onClick={() => save('rejected', false, false)}>
-                  Kun nødvendige
+                  {t.cookie.rejectAll}
                 </OutlineButton>
               )}
               {!expanded && (
                 <OutlineButton onClick={() => setExpanded(true)}>
-                  Tilpas
+                  {t.cookie.customize}
                 </OutlineButton>
               )}
               <PrimaryButton onClick={() => save('accepted', true, true)}>
-                Accepter alle
+                {t.cookie.acceptAll}
               </PrimaryButton>
             </div>
 
@@ -198,15 +199,15 @@ export default function CookieConsent() {
               className="px-5 pb-4 text-[11px] leading-relaxed"
               style={{ color: 'var(--text-muted)' }}
             >
-              Læs mere i vores{' '}
+              {t.cookie.legal}{' '}
               <a
                 href="/privatlivspolitik"
                 className="underline underline-offset-2 transition-colors duration-150"
                 style={{ color: 'var(--text-secondary)' }}
               >
-                privatlivspolitik
+                {t.cookie.legalLink}
               </a>
-              . Du kan til enhver tid ændre dit samtykke via linket i sidefoden.
+              {t.cookie.legalEnd}
             </p>
           </motion.div>
         </>
@@ -286,7 +287,7 @@ function CookieToggle({
         aria-label={`Slå ${label}-cookies ${checked ? 'fra' : 'til'}`}
         disabled={disabled}
         onClick={() => !disabled && onChange(!checked)}
-        className="flex-shrink-0 mt-0.5 relative w-10 h-5 rounded-full transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2"
+        className="flex-shrink-0 mt-0.5 relative w-11 h-6 rounded-full transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2"
         style={{
           background: checked ? 'var(--accent)' : 'var(--border-strong)',
           cursor: disabled ? 'not-allowed' : 'pointer',
@@ -294,8 +295,8 @@ function CookieToggle({
         }}
       >
         <span
-          className="absolute top-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-all duration-200"
-          style={{ left: checked ? '22px' : '2px' }}
+          className="absolute top-1 w-4 h-4 rounded-full bg-white shadow-sm transition-all duration-200"
+          style={{ left: checked ? '26px' : '3px' }}
         />
       </button>
     </div>

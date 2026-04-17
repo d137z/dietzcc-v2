@@ -3,24 +3,25 @@
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import { openCookieConsent } from "@/components/CookieConsent";
-
-const navLinks = [
-  { href: "/", label: "Forside" },
-  { href: "/losninger", label: "Løsninger" },
-  { href: "/eksempler", label: "Eksempler" },
-  { href: "/om", label: "Om mig" },
-  { href: "/proces", label: "Proces" },
-  { href: "/kontakt", label: "Kontakt" },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Footer() {
+  const { t } = useLanguage();
+  const navLinks = [
+    { href: "/", label: t.nav.home },
+    { href: "/losninger", label: t.nav.solutions },
+    { href: "/eksempler", label: t.nav.examples },
+    { href: "/om", label: t.nav.about },
+    { href: "/proces", label: t.nav.process },
+    { href: "/kontakt", label: t.nav.contact },
+  ];
   return (
     <footer
       className="border-t"
       style={{ borderColor: "var(--border-subtle)", background: "var(--bg-secondary)" }}
     >
       <div className="container-wide py-16">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-8">
           {/* Venstre */}
           <div>
             <div className="flex items-center gap-2 mb-4">
@@ -51,22 +52,23 @@ export default function Footer() {
               className="text-xs font-medium mb-4 uppercase tracking-wider"
               style={{ color: "var(--text-muted)", letterSpacing: "0.05em" }}
             >
-              Navigation
+              {t.footer.navigation}
             </p>
-            <nav className="flex flex-col gap-2" aria-label="Footer navigation">
+            <nav className="grid grid-cols-2 gap-x-6 gap-y-2" aria-label="Footer navigation">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-sm transition-colors duration-200"
+                  className="inline-flex items-center gap-1.5 text-sm transition-colors duration-200"
                   style={{ color: "var(--text-secondary)" }}
                   onMouseEnter={(e) => {
-                    (e.target as HTMLElement).style.color = "var(--text-primary)";
+                    (e.currentTarget as HTMLElement).style.color = "var(--text-primary)";
                   }}
                   onMouseLeave={(e) => {
-                    (e.target as HTMLElement).style.color = "var(--text-secondary)";
+                    (e.currentTarget as HTMLElement).style.color = "var(--text-secondary)";
                   }}
                 >
+                  <span style={{ color: "var(--accent)", fontSize: "10px" }}>•</span>
                   {link.label}
                 </Link>
               ))}
@@ -79,7 +81,7 @@ export default function Footer() {
               className="text-xs font-medium mb-4 uppercase tracking-wider"
               style={{ color: "var(--text-muted)", letterSpacing: "0.05em" }}
             >
-              Kontakt
+              {t.footer.contact}
             </p>
             <div className="flex flex-col gap-2">
               <a
@@ -132,7 +134,7 @@ export default function Footer() {
           className="mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between gap-2 border-t text-xs"
           style={{ borderColor: "var(--border-subtle)", color: "var(--text-muted)" }}
         >
-          <p>© 2026 Dietz Code &amp; Control · CVR 46080904</p>
+          <p>{t.footer.copyright}</p>
           <button
             onClick={openCookieConsent}
             className="transition-colors duration-150 hover:underline underline-offset-2"
@@ -140,7 +142,7 @@ export default function Footer() {
             onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--text-secondary)')}
             onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = 'var(--text-muted)')}
           >
-            Cookie-indstillinger
+            {t.footer.cookieSettings}
           </button>
         </div>
       </div>

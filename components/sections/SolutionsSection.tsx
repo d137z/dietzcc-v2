@@ -13,45 +13,10 @@ import {
   ArrowRight,
 } from "lucide-react";
 import AnimateIn from "@/components/AnimateIn";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-const services = [
-  {
-    icon: Bot,
-    title: "AI-assistenter og chatbots",
-    body: "Træne på dine egne data. Svarer kunder på hjemmesiden eller hjælper dine medarbejdere internt. Integreres med dine eksisterende systemer.",
-    mockup: "chat",
-  },
-  {
-    icon: Mail,
-    title: "E-mail-automation",
-    body: "Automatiske svar. Klassificering af indgående mails. Opfølgning der ikke glemmes. Udtrækning af data fra henvendelser.",
-    mockup: "email",
-  },
-  {
-    icon: Network,
-    title: "Systemintegrationer",
-    body: "Har du e-conomic, HubSpot, Shopify, Microsoft 365 og et lager-system der ikke taler sammen? Jeg bygger broerne.",
-    mockup: "integration",
-  },
-  {
-    icon: FileSearch,
-    title: "Dokumenthåndtering med AI",
-    body: "Fakturaer, kontrakter, ordrebekræftelser. Læses automatisk, data udtrækkes, sendes videre til rette system.",
-    mockup: "docs",
-  },
-  {
-    icon: Workflow,
-    title: "Workflow-automation",
-    body: "Fra Zapier-agtige flows til custom pipelines. Bygget så du ikke selv skal vedligeholde dem.",
-    mockup: "workflow",
-  },
-  {
-    icon: Code2,
-    title: "Custom software",
-    body: "Når ingen færdig løsning passer, bygger jeg den. Webapps, dashboards, interne værktøjer.",
-    mockup: "code",
-  },
-];
+const serviceIcons = [Bot, Mail, Network, FileSearch, Workflow, Code2];
+const serviceMockups = ["chat", "email", "integration", "docs", "workflow", "code"];
 
 // Minimalist SVG mockups
 function ChatMockup() {
@@ -149,7 +114,7 @@ function IntegrationMockup() {
         </div>
       ))}
       <div className="flex flex-col items-center gap-2 relative">
-        <div className="absolute top-5 -left-8 right-0 flex items-center" style={{ width: "150px", left: "-80px" }}>
+        <div className="hidden sm:flex absolute top-5 right-0 items-center" style={{ width: "150px", left: "-80px" }}>
           <div className="h-px flex-1" style={{ background: "var(--accent)", opacity: 0.4 }} />
         </div>
         <div
@@ -325,11 +290,31 @@ function ServiceCard({
 }
 
 export default function SolutionsSection() {
+  const { t } = useLanguage();
+  const services = t.solutions.services.map((s, i) => ({
+    icon: serviceIcons[i],
+    title: s.title,
+    body: s.body,
+    mockup: serviceMockups[i],
+  }));
+
   return (
-    <section id="losninger" className="section-padding" style={{ background: "var(--bg-primary)" }}>
-      <div className="container-wide">
+    <section id="losninger" className="section-padding relative overflow-hidden" style={{ background: "var(--bg-primary)" }}>
+      {/* Background image */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        aria-hidden="true"
+        style={{
+          backgroundImage: "url('/images/hero-bg2.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          opacity: 0.27,
+        }}
+      />
+      <div className="container-wide relative">
         <AnimateIn className="mb-16">
-          <p className="eyebrow mb-4">LØSNINGERNE</p>
+          <p className="eyebrow mb-4">{t.solutions.eyebrow}</p>
           <h2
             className="mb-6 max-w-2xl"
             style={{
@@ -341,14 +326,13 @@ export default function SolutionsSection() {
               color: "var(--text-primary)",
             }}
           >
-            Skræddersyet software, der passer præcis til din virksomhed.
+            {t.solutions.headline}
           </h2>
           <p
             className="max-w-xl"
             style={{ fontSize: "var(--font-body)", color: "var(--text-secondary)", lineHeight: 1.7 }}
           >
-            Ingen dyre standardløsninger med funktioner du ikke bruger. Kun det du har brug for —
-            bygget hurtigt og vedligeholdt af én person.
+            {t.solutions.sub}
           </p>
         </AnimateIn>
 
@@ -364,7 +348,7 @@ export default function SolutionsSection() {
             className="inline-flex items-center gap-2 text-sm font-medium transition-colors duration-200"
             style={{ color: "var(--accent)" }}
           >
-            Se konkrete eksempler
+            {t.solutions.link}
             <ArrowRight size={14} />
           </Link>
         </AnimateIn>

@@ -4,47 +4,34 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { MessageCircle, FileText, Hammer, Handshake } from "lucide-react";
 import AnimateIn from "@/components/AnimateIn";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-const steps = [
-  {
-    number: "01",
-    icon: MessageCircle,
-    title: "Samtale",
-    body: "30 minutter på Teams eller telefon. Gratis og uforpligtende. Vi finder ud af om jeg kan hjælpe — og om vi passer sammen.",
-  },
-  {
-    number: "02",
-    icon: FileText,
-    title: "Plan",
-    body: "Jeg sender en skriftlig plan med scope, pris og tidsramme. Ingen overraskelser senere.",
-  },
-  {
-    number: "03",
-    icon: Hammer,
-    title: "Bygning",
-    body: "Du får adgang til at følge fremskridtet. Vi justerer undervejs. Typisk 2–6 uger afhængigt af opgavens størrelse.",
-  },
-  {
-    number: "04",
-    icon: Handshake,
-    title: "Drift",
-    body: "Løsningen overdrages. Valgfri drift-aftale hvis du vil have mig til at holde øje. Ellers er den din.",
-  },
-];
+const stepIcons = [MessageCircle, FileText, Hammer, Handshake];
 
 export default function ProcessSection() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-10% 0px" });
+  const { t } = useLanguage();
 
   return (
     <section
       id="proces"
-      className="section-padding"
+      className="section-padding relative overflow-hidden"
       style={{ background: "var(--bg-secondary)" }}
     >
-      <div className="container-wide">
+      <div
+        className="absolute inset-0 pointer-events-none"
+        aria-hidden="true"
+        style={{
+          backgroundImage: "url('/images/baggrund6.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          opacity: 0.27,
+        }}
+      />
+      <div className="container-wide relative">
         <AnimateIn className="mb-16">
-          <p className="eyebrow mb-4">PROCESSEN</p>
+          <p className="eyebrow mb-4">{t.process.eyebrow}</p>
           <h2
             className="mb-6 max-w-2xl"
             style={{
@@ -56,7 +43,7 @@ export default function ProcessSection() {
               color: "var(--text-primary)",
             }}
           >
-            Fra første samtale til kørende løsning.
+            {t.process.headline}
           </h2>
         </AnimateIn>
 
@@ -72,8 +59,8 @@ export default function ProcessSection() {
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {steps.map((step, i) => {
-              const Icon = step.icon;
+            {t.process.steps.map((step, i) => {
+              const Icon = stepIcons[i];
               return (
                 <motion.div
                   key={step.number}

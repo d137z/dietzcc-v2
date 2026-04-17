@@ -4,6 +4,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CookieConsent from "@/components/CookieConsent";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -93,6 +94,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${inter.variable}`}
     >
       <body className="min-h-screen flex flex-col antialiased">
+        <LanguageProvider>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -128,6 +130,7 @@ export default function RootLayout({
         </main>
         <Footer />
         <CookieConsent />
+        </LanguageProvider>
       </body>
     </html>
   );

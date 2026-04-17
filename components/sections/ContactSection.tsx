@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CheckCircle, Mail, Phone } from "lucide-react";
 import AnimateIn from "@/components/AnimateIn";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 type FormState = "idle" | "loading" | "success" | "error";
 
@@ -20,20 +21,8 @@ interface FieldErrors {
   message?: string;
 }
 
-function validate(data: FormData): FieldErrors {
-  const errors: FieldErrors = {};
-  if (!data.name.trim()) errors.name = "Navn er påkrævet.";
-  if (!data.email.trim()) {
-    errors.email = "E-mail er påkrævet.";
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
-    errors.email = "Indtast en gyldig e-mail-adresse.";
-  }
-  if (!data.message.trim()) errors.message = "Besked er påkrævet.";
-  else if (data.message.trim().length < 10) errors.message = "Beskriv venligst lidt mere (mindst 10 tegn).";
-  return errors;
-}
-
 export default function ContactSection() {
+  const { t } = useLanguage();
   const [formState, setFormState] = useState<FormState>("idle");
   const [formData, setFormData] = useState<FormData>({
     name: "",
@@ -43,6 +32,19 @@ export default function ContactSection() {
   });
   const [errors, setErrors] = useState<FieldErrors>({});
   const [serverError, setServerError] = useState("");
+
+  function validate(data: FormData): FieldErrors {
+    const errors: FieldErrors = {};
+    if (!data.name.trim()) errors.name = t.contact.errorName;
+    if (!data.email.trim()) {
+      errors.email = t.contact.errorEmail;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+      errors.email = t.contact.errorEmailInvalid;
+    }
+    if (!data.message.trim()) errors.message = t.contact.errorMessage;
+    else if (data.message.trim().length < 10) errors.message = t.contact.errorMessageShort;
+    return errors;
+  }
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -82,7 +84,7 @@ export default function ContactSection() {
     } catch (err) {
       setFormState("error");
       setServerError(
-        err instanceof Error ? err.message : "Noget gik galt. Prøv igen eller skriv direkte til martin@dietzcc.dk"
+        err instanceof Error ? err.message : t.contact.errorServer
       );
     }
   };
@@ -105,20 +107,22 @@ export default function ContactSection() {
       className="section-padding relative overflow-hidden"
       style={{ background: "var(--bg-primary)" }}
     >
-      {/* Subtle background accent */}
       <div
         className="absolute inset-0 pointer-events-none"
         aria-hidden="true"
         style={{
-          background: "radial-gradient(ellipse 70% 60% at 70% 50%, rgba(6,182,212,0.06) 0%, transparent 70%)",
+          backgroundImage: "url('/images/baggrund7.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          opacity: 0.27,
         }}
       />
 
       <div className="container-wide relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-24">
           {/* Venstre — tekst */}
           <AnimateIn>
-            <p className="eyebrow mb-4">KONTAKT</p>
+            <p className="eyebrow mb-4">{t.contact.eyebrow}</p>
             <h2
               className="mb-6"
               style={{
@@ -130,14 +134,13 @@ export default function ContactSection() {
                 color: "var(--text-primary)",
               }}
             >
-              Har du en opgave, der stjæler tid?
+              {t.contact.headline}
             </h2>
             <p
               className="mb-10"
               style={{ fontSize: "var(--font-body)", color: "var(--text-secondary)", lineHeight: 1.7 }}
             >
-              Skriv et par linjer om hvad du kæmper med. Så vender jeg tilbage inden for 24 timer
-              med mine tanker — uden forpligtelser.
+              {t.contact.sub}
             </p>
 
             <div className="flex flex-col gap-4">
@@ -212,10 +215,10 @@ export default function ContactSection() {
                       fontFamily: "var(--font-geist-sans)",
                     }}
                   >
-                    Tak.
+                    {t.contact.successTitle}
                   </h3>
                   <p style={{ fontSize: "var(--font-body-sm)", color: "var(--text-secondary)" }}>
-                    Jeg har modtaget din besked og vender tilbage inden for 24 timer.
+                    {t.contact.successBody}
                   </p>
                 </motion.div>
               ) : (
@@ -238,7 +241,7 @@ export default function ContactSection() {
                         className="block mb-2 text-sm font-medium"
                         style={{ color: "var(--text-primary)" }}
                       >
-                        Navn
+                        {t.contact.labelName}
                       </label>
                       <input
                         id="name"
@@ -246,7 +249,7 @@ export default function ContactSection() {
                         type="text"
                         value={formData.name}
                         onChange={handleChange}
-                        placeholder="Dit fulde navn"
+                        placeholder={t.contact.placeholderName}
                         style={inputStyle(!!errors.name)}
                         onFocus={(e) => {
                           e.target.style.borderColor = "var(--accent)";
@@ -273,7 +276,7 @@ export default function ContactSection() {
                         className="block mb-2 text-sm font-medium"
                         style={{ color: "var(--text-primary)" }}
                       >
-                        E-mail
+                        {t.contact.labelEmail}
                       </label>
                       <input
                         id="email"
@@ -281,7 +284,7 @@ export default function ContactSection() {
                         type="email"
                         value={formData.email}
                         onChange={handleChange}
-                        placeholder="din@email.dk"
+                        placeholder={t.contact.placeholderEmail}
                         style={inputStyle(!!errors.email)}
                         onFocus={(e) => {
                           e.target.style.borderColor = "var(--accent)";
@@ -308,8 +311,8 @@ export default function ContactSection() {
                         className="block mb-2 text-sm font-medium"
                         style={{ color: "var(--text-primary)" }}
                       >
-                        Virksomhed{" "}
-                        <span style={{ color: "var(--text-muted)", fontWeight: 400 }}>(valgfri)</span>
+                        {t.contact.labelCompany}{" "}
+                        <span style={{ color: "var(--text-muted)", fontWeight: 400 }}>{t.contact.labelCompanyOpt}</span>
                       </label>
                       <input
                         id="company"
@@ -317,7 +320,7 @@ export default function ContactSection() {
                         type="text"
                         value={formData.company}
                         onChange={handleChange}
-                        placeholder="Firmanavn A/S"
+                        placeholder={t.contact.placeholderCompany}
                         style={inputStyle(false)}
                         onFocus={(e) => {
                           e.target.style.borderColor = "var(--accent)";
@@ -337,7 +340,7 @@ export default function ContactSection() {
                         className="block mb-2 text-sm font-medium"
                         style={{ color: "var(--text-primary)" }}
                       >
-                        Besked
+                        {t.contact.labelMessage}
                       </label>
                       <textarea
                         id="message"
@@ -345,7 +348,7 @@ export default function ContactSection() {
                         rows={5}
                         value={formData.message}
                         onChange={handleChange}
-                        placeholder="Beskriv gerne hvad du kæmper med i dag..."
+                        placeholder={t.contact.placeholderMessage}
                         style={{
                           ...inputStyle(!!errors.message),
                           resize: "vertical",
@@ -405,10 +408,10 @@ export default function ContactSection() {
                               animation: "loading-bar 1.5s ease-in-out infinite",
                             }}
                           />
-                          Sender...
+                          {t.contact.sending}
                         </span>
                       ) : (
-                        "Send besked"
+                        t.contact.submit
                       )}
                     </button>
                   </div>
