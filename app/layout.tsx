@@ -73,6 +73,14 @@ export const metadata: Metadata = {
       "Jeg bygger AI-assistenter, integrationer og automationer der fjerner manuelle opgaver fra din hverdag.",
     images: ["/og-image.png"],
   },
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon.ico", sizes: "32x32", type: "image/x-icon" },
+      { url: "/favicon.ico", sizes: "48x48", type: "image/x-icon" },
+    ],
+    apple: { url: "/favicon.ico", sizes: "180x180" },
+  },
   robots: {
     index: true,
     follow: true,
