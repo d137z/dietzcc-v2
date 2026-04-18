@@ -64,14 +64,14 @@ export default function Header() {
         <div className="container-wide">
           <div className="flex items-center justify-between h-16 md:h-18">
             {/* Logo */}
-            <Link href="/" aria-label="Dietz Code & Control — til forsiden">
+            <Link href="/" aria-label="Dietz Code & Control — til forsiden" className="-ml-6 lg:-ml-12">
               <Image
-                src="/images/logo.png"
+                src="/images/logo9.png"
                 alt="Dietz Code & Control"
                 width={600}
                 height={600}
-                className="h-12 md:h-14 w-auto object-contain"
-                style={{ mixBlendMode: "multiply" }}
+                className="h-[2.7rem] md:h-[3.15rem] w-auto object-contain object-left"
+                style={{  }}
                 priority
               />
             </Link>
