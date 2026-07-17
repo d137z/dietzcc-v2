@@ -51,6 +51,8 @@ export default function Header() {
     return () => { document.body.style.overflow = ""; };
   }, [menuOpen]);
 
+  if (pathname === "/skattejagt") return null;
+
   return (
     <>
       <header

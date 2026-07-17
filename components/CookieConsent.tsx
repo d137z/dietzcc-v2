@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, Shield } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -20,6 +21,7 @@ export function openCookieConsent() {
 
 export default function CookieConsent() {
   const { t } = useLanguage();
+  const pathname = usePathname();
   const [visible, setVisible] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [statistics, setStatistics] = useState(false);
@@ -66,6 +68,8 @@ export default function CookieConsent() {
     setVisible(false);
     setExpanded(false);
   };
+
+  if (pathname === '/skattejagt') return null;
 
   return (
     <AnimatePresence>

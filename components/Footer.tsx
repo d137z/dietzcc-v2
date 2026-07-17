@@ -1,12 +1,17 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ExternalLink } from "lucide-react";
 import { openCookieConsent } from "@/components/CookieConsent";
 import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Footer() {
   const { t } = useLanguage();
+  const pathname = usePathname();
+
+  if (pathname === "/skattejagt") return null;
+
   const navLinks = [
     { href: "/", label: t.nav.home },
     { href: "/losninger", label: t.nav.solutions },

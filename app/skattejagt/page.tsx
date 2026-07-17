@@ -9,20 +9,24 @@ export const metadata: Metadata = {
 export default function SkattejagtPage() {
   return (
     <section
-      className="section-padding"
-      style={{ background: "var(--bg-secondary)", minHeight: "100vh" }}
+      style={{
+        background: "var(--bg-secondary)",
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "2rem 1rem",
+      }}
     >
-      <div className="container-wide pt-16 flex justify-center">
-        <div style={{ maxWidth: 600, width: "100%" }}>
-          <Image
-            src="/images/skattejagt.png"
-            alt="Skattejagt"
-            width={548}
-            height={734}
-            style={{ width: "100%", height: "auto", borderRadius: 12 }}
-            priority
-          />
-        </div>
+      <div style={{ maxWidth: 600, width: "100%" }}>
+        <Image
+          src="/images/skattejagt.png"
+          alt="Skattejagt"
+          width={548}
+          height={734}
+          style={{ width: "100%", height: "auto", borderRadius: 12 }}
+          priority
+        />
       </div>
     </section>
   );
